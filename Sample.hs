@@ -55,3 +55,12 @@ zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
 zipWith' _ [] _ = []
 zipWith' _ _ [] = []
 zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
+
+break' :: (a -> Bool) -> [a] -> ([a], [a])
+break' f arr = (result !! 0, result !! 1)
+    where
+        break2 :: (a -> Bool) -> [a] -> [a] -> [[a]]
+        break2 f arr [] = [arr, []]
+        break2 f arr all@(x:xs) =
+            if f x then [arr, all] else break2 f (arr ++ [x]) xs
+        result = break2 f [] arr
