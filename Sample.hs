@@ -1,3 +1,5 @@
+import Data.List
+
 factorial :: Integer -> Integer
 factorial n = product [1..n]
 
@@ -64,3 +66,22 @@ break' f arr = (result !! 0, result !! 1)
         break2 f arr all@(x:xs) =
             if f x then [arr, all] else break2 f (arr ++ [x]) xs
         result = break2 f [] arr
+
+flip' :: (a -> b -> c) -> (b -> a -> c)
+flip' f y x = f x y
+
+chain :: Integer -> [Integer]
+chain 1 = [1]
+chain n
+    | even n = n : chain (n `div` 2)
+    | odd n = n : chain (n * 3 + 1)
+
+numLongChains :: Int
+numLongChains = length (filter isLong (map chain [1..100]))
+    where isLong xs = length xs >= 15
+
+sum' :: (Num a) => [a] -> a
+sum' = foldl (+) 0
+
+map' :: (a -> b) -> [a] -> [b]
+map' f xs = foldr (\x y -> f x : y) [] xs
