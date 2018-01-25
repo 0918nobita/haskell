@@ -1,5 +1,9 @@
 import Data.Char
 import Data.List
+import qualified Data.Map as Map
+import qualified Geometry.Sphere as Sphere
+import qualified Geometry.Cuboid as Cuboid
+import qualified Geometry.Cube as Cube
 
 factorial :: Integer -> Integer
 factorial n = product [1..n]
