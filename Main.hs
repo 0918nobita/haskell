@@ -69,3 +69,71 @@ treeElem x (Node a left right)
     | x < a = treeElem x left
     | x > a = treeElem x right
 
+-- 7.8 型クラス中級講座
+-- Haskell に自動導出してもらうことで独自の型を標準型クラスのインスタンスにする方法を学んだ
+-- ここからは独自の型クラス作り、そのインスタンスを手動で作る方法を学ぶ
+
+-- 型クラスはインターフェースのようなもので、特定の振る舞い(等値判定, 順序比較, 列挙, ...)を定義する
+-- 定義された通りに振る舞うことができる型は、その型クラスのインスタンスとなる
+-- 型クラスの振る舞いは、型クラス関数を定義することで得られる
+-- 型宣言だけして実装は後回しにしても構わない
+-- 「ある型 T がある型クラス C のインスタンスである」→「型クラス C が定義する関数(メソッド)たちを型 T に対して使える」
+
+-- Eq 型クラスは == と /= という関数(メソッド)を定義している
+
+-- class Eq a where
+--     (==) :: a -> a -> Bool
+--     (/=) :: a -> a -> Bool
+--     x == y = not (x /= y)
+--     x /= y = not (X == y)
+
+-- class Eq a where は Eq という新しい型クラスの定義が始まることを意味する
+-- a は型変数で、将来 Eq 型クラスのインスタンスとなるであろう型を表す
+-- 後から == 関数のシグネチャを確認すると (Eq a) => a -> a -> Bool になっている
+
+data TrafficLight = Red | Yellow | Green
+
+instance Eq TrafficLight where
+    Red == Red = True
+    Green == Green = True
+    Yellow == Yellow = True
+    _ == _ = False
+
+-- instance キーワードを使ってインスタンスを作る
+-- == と /= のどちらかを定義すればいい (最小完全定義)
+
+instance Show TrafficLight where
+    show Red = "Red light"
+    show Green = "Green light"
+    show Yellow = "Yellow light"
+
+-- Eq は自動導出しても同じ効果が得られる
+-- Show の自動導出を使うと値コンストラクタがそのまま文字列に変換されて出るだけ
+
+class YesNo a where
+    yesno :: a -> Bool
+
+instance YesNo Int where
+    yesno 0 = False
+    yesno _ = True
+
+instance YesNo [a] where
+    yesno [] = False
+    yesno _ = True
+
+instance YesNo Bool where
+    yesno = id
+
+-- id は、引数をひとつとって同じものを返すだけの標準ライブラリ関数
+
+instance YesNo (Maybe a) where
+    yesno (Just _) = True
+    yesno _ = False
+
+instance YesNo (Tree a) where
+    yesno EmptyTree = False
+    yesno _ = True
+
+instance YesNo TrafficLight where
+    yesno Red = False
+    yesno _ = True
