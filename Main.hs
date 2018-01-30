@@ -1,9 +1,11 @@
 import qualified Data.Map as Map
 
+-- レコード構文
 data Person = Person { firstName :: String
     , lastName :: String
     , age :: Int } deriving (Eq, Show, Read)
 
+-- 型定義
 data Vector a = Vector a a a deriving (Show)
 
 vplus :: (Num a) => Vector a -> Vector a -> Vector a
@@ -15,10 +17,13 @@ dotProd :: (Num a) => Vector a -> Vector a -> a
 vmult :: (Num a) => Vector a -> a -> Vector a
 (Vector i j k) `vmult` m = Vector (i * m) (j * m) (k * m)
 
+-- 型定義
 data LockerState = Taken | Free deriving (Show, Eq)
 
+-- 型シノニム
 type Code = String
 
+-- 型シノニムの多相化
 type LockerMap = Map.Map Int (LockerState, Code)
 
 lockerLookup :: Int -> LockerMap -> Either String Code
@@ -56,3 +61,11 @@ treeInsert x (Node a left right)
     | x == a = Node x left right
     | x < a = Node a (treeInsert x left) right
     | x > a = Node a left (treeInsert x right)
+
+treeElem :: (Ord a) => a -> Tree a -> Bool
+treeElem x EmptyTree = False
+treeElem x (Node a left right)
+    | x == a = True
+    | x < a = treeElem x left
+    | x > a = treeElem x right
+
