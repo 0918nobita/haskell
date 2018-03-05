@@ -151,3 +151,8 @@ instance YesNo TrafficLight where
 -- instance Functor (Either a) where
 --     fmap f (Right x) = Right (f x)
 --     fmap f (Left x) = Left x
+
+main :: IO ()
+main = do
+    list <- sequence [getLine, getLine, getLine]
+    print list
