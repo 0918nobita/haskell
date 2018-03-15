@@ -1,7 +1,2 @@
 .DS_Store
-*.hi
-*.o
-
-Main
-reverse
-capslocker
+/dist/
