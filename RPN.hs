@@ -61,6 +61,13 @@ myAction2 = (++) <$> getLine <*> getLine
 --         x <- b
 --         return (f x)
 
+-- instance Applicative ((->) r) where
+--     pure x = (\_ -> x)
+--     f <*> g = \x -> f x (g x)
+
+-- pure は、引数を無視して常にその値を返す関数
+-- (->) r インスタンスに特化した pure の型は pure :: a -> (r -> a)
+
 main :: IO ()
 main = do
     args <- getArgs
