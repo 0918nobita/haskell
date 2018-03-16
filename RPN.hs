@@ -43,7 +43,28 @@ instance Functor CMaybe where
 -- > id (CJust 0 "haha")
 -- CJust 0 "haha"
 
+myAction1 :: IO String
+myAction1 = do
+    a <- getLine
+    b <- getLine
+    return $ a ++ b
+
+-- IO 型クラスは Applicative インスタンスなのでアプリカティブ・スタイルを利用できる
+-- 動作は myAction1 と同じ
+myAction2 :: IO String
+myAction2 = (++) <$> getLine <*> getLine
+
+-- instance Applicative IO where
+--     pure = return
+--     a <*> b = do
+--         f <- a
+--         x <- b
+--         return (f x)
+
 main :: IO ()
 main = do
     args <- getArgs
     putStrLn $ show $ solveRPN $ args !! 0
+    result1 <- myAction1
+    result2 <- myAction2
+    mapM_ putStrLn [result1, result2]
