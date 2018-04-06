@@ -162,6 +162,13 @@ newtype CoolBool = CoolBool { getCoolBool :: Bool }
 helloMe :: CoolBool -> String
 helloMe (CoolBool _) = "hello"
 
+-- Monoid
+-- class Monoid m where
+--     mempty :: m  多相定数 ( Bounded の minBound みたいなもの )
+--     mappend :: m -> m -> m  モノイド固有の二項演算 ( 同じ型の引数を２つ取り、その型の別の値を返す )
+--     mconcat :: [m] -> m  モノイドのリストを取って、単一の値を返す関数
+--     mconcat = foldr mappend mempty
+
 main :: IO ()
 main = do
     list <- sequence [getLine, getLine, getLine]
