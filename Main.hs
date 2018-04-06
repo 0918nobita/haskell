@@ -152,6 +152,10 @@ instance YesNo TrafficLight where
 --     fmap f (Right x) = Right (f x)
 --     fmap f (Left x) = Left x
 
+sequenceA_ :: (Applicative f) => [f a] -> f [a]
+sequenceA_ [] = pure []
+sequenceA_ (x:xs) = (:) <$> x <*> sequenceA xs
+
 main :: IO ()
 main = do
     list <- sequence [getLine, getLine, getLine]
