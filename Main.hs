@@ -169,6 +169,11 @@ helloMe (CoolBool _) = "hello"
 --     mconcat :: [m] -> m  モノイドのリストを取って、単一の値を返す関数
 --     mconcat = foldr mappend mempty
 
+-- モノイド則
+-- mempty `mappend` x = x
+-- x `mappend` mempty = x
+-- (x `mappend` y) `mappend` z = x `mappend` (y `mappend` z)
+
 main :: IO ()
 main = do
     list <- sequence [getLine, getLine, getLine]
