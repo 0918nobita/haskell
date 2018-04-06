@@ -156,6 +156,12 @@ sequenceA_ :: (Applicative f) => [f a] -> f [a]
 sequenceA_ [] = pure []
 sequenceA_ (x:xs) = (:) <$> x <*> sequenceA xs
 
+-- data CoolBool = CoolBool { getCoolBool :: Bool }
+newtype CoolBool = CoolBool { getCoolBool :: Bool }
+
+helloMe :: CoolBool -> String
+helloMe (CoolBool _) = "hello"
+
 main :: IO ()
 main = do
     list <- sequence [getLine, getLine, getLine]
