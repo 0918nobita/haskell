@@ -9,6 +9,7 @@ module Lib
   ) where
 
 import Control.Applicative
+import Control.Monad
 
 newtype Parser a = Parser (String -> [(a, String)])
 
@@ -56,6 +57,10 @@ parserC = do
 instance Alternative Parser where
   empty = Parser $ \_ -> []
   p <|> q = Parser $ \src -> parse p src ++ parse q src
+
+instance MonadPlus Parser where
+  mzero = empty
+  mplus = (<|>)
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
