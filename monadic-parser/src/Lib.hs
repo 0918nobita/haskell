@@ -1,4 +1,12 @@
-module Lib ( someFunc, Parser, parse, item ) where
+module Lib
+  ( someFunc
+  , Parser
+  , parse
+  , item
+  , parserA
+  , parserB
+  , parserC
+  ) where
 
 newtype Parser a = Parser (String -> [(a, String)])
 
@@ -30,6 +38,18 @@ instance Monad Parser where
   p >>= f = Parser $ \src ->
     parse p src
       |> concatMap (\(ast, str) -> parse (f ast) str)
+
+parserA :: Parser String
+parserA = item >>= \a -> ((\b -> [a, b]) <$> item)
+
+parserB :: Parser String
+parserB = (\a b -> [a, b]) <$> item <*> item
+
+parserC :: Parser String
+parserC = do
+            a <- item
+            b <- item
+            return [a, b]
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
