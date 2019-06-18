@@ -7,11 +7,12 @@ parse (Parser p) = p
 
 item :: Parser Char
 item = Parser (\cs -> case cs of
-                  ""      -> []
-                  (c:cs') -> [(c, cs')])
+                ""      -> []
+                (c:cs') -> [(c, cs')])
 
 instance Functor Parser where
-  fmap f p = Parser $ \src -> map (\(a, str) -> (f a, str)) $ (parse p) src
+  fmap f p = Parser $ \src ->
+    map (\(a, str) -> (f a, str)) $ (parse p) src
 
 infixl 1 |>
 (|>) :: a -> (a -> b) -> b
