@@ -1,6 +1,4 @@
-module Lib
-    ( someFunc
-    ) where
+module Lib ( someFunc ) where
 
 newtype Parser a = Parser (String -> [(a, String)])
 
@@ -14,6 +12,12 @@ item = Parser (\cs -> case cs of
 
 instance Functor Parser where
   fmap f p = Parser $ \src -> map (\(a, str) -> (f a, str)) $ (parse p) src
+
+instance Applicative Parser where
+  pure ast = Parser $ \src -> [(ast, "")]
+  precede <*> succeed = Parser $ \src ->
+      let fs = map fst (parse precede "") in
+          concatMap (\(ast, str) -> map (\f -> (f ast, str)) fs) (parse succeed src)
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
