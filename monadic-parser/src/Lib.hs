@@ -8,6 +8,8 @@ module Lib
   , parserC
   ) where
 
+import Control.Applicative
+
 newtype Parser a = Parser (String -> [(a, String)])
 
 parse :: Parser a -> String -> [(a, String)]
@@ -50,6 +52,10 @@ parserC = do
             a <- item
             b <- item
             return [a, b]
+
+instance Alternative Parser where
+  empty = Parser $ \_ -> []
+  p <|> q = Parser $ \src -> parse p src ++ parse q src
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
