@@ -13,11 +13,17 @@ item = Parser (\cs -> case cs of
 instance Functor Parser where
   fmap f p = Parser $ \src -> map (\(a, str) -> (f a, str)) $ (parse p) src
 
+infixl 1 |>
+(|>) :: a -> (a -> b) -> b
+(|>) = flip ($)
+
 instance Applicative Parser where
-  pure ast = Parser $ \src -> [(ast, "")]
+  pure ast = Parser $ \src -> [(ast, src)]
   precede <*> succeed = Parser $ \src ->
-      let fs = map fst (parse precede "") in
-          concatMap (\(ast, str) -> map (\f -> (f ast, str)) fs) (parse succeed src)
+    parse precede src
+      |> concatMap (\(f, str) ->
+        parse succeed str
+          |> map (\(ast, str') -> (f ast, str')))
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
