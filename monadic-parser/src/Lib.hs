@@ -58,9 +58,7 @@ instance Alternative Parser where
   empty = Parser $ \_ -> []
   p <|> q = Parser $ \src -> parse p src ++ parse q src
 
-instance MonadPlus Parser where
-  mzero = empty
-  mplus = (<|>)
+instance MonadPlus Parser
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
