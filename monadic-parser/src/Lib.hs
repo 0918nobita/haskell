@@ -6,10 +6,11 @@ module Lib
   , parserA
   , parserB
   , parserC
+  , satisfy
   ) where
 
 import Control.Applicative (Alternative, empty, (<|>))
-import Control.Monad (MonadPlus)
+import Control.Monad (MonadPlus, mzero)
 
 newtype Parser a = Parser (String -> [(a, String)])
 
@@ -59,6 +60,9 @@ instance Alternative Parser where
   p <|> q = Parser $ \src -> parse p src ++ parse q src
 
 instance MonadPlus Parser
+
+satisfy :: (Char -> Bool) -> Parser Char
+satisfy f = item >>= (\ast -> if f ast then return ast else mzero)
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
