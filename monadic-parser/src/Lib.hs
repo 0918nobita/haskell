@@ -9,6 +9,7 @@ module Lib
   , satisfy
   , char
   , string
+  , oneOf
   ) where
 
 import Control.Applicative (Alternative, empty, (<|>))
@@ -72,6 +73,9 @@ char c = satisfy (c ==)
 string :: String -> Parser String
 string ""     = return ""
 string (c:cs) = char c >>= (\cutChar -> (cutChar :) <$> string cs)
+
+oneOf :: String -> Parser Char
+oneOf cs = satisfy (`elem` cs)
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
