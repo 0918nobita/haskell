@@ -7,6 +7,7 @@ module Lib
   , parserB
   , parserC
   , satisfy
+  , char
   ) where
 
 import Control.Applicative (Alternative, empty, (<|>))
@@ -63,6 +64,9 @@ instance MonadPlus Parser
 
 satisfy :: (Char -> Bool) -> Parser Char
 satisfy f = item >>= (\ast -> if f ast then return ast else mzero)
+
+char :: Char -> Parser Char
+char c = satisfy (c ==)
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
