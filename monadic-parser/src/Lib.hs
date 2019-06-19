@@ -12,6 +12,9 @@ module Lib
   , oneOf
   , many
   , some
+  , parserD
+  , parserE
+  , parserF
   ) where
 
 import Control.Applicative (Alternative, empty, (<|>), many, some)
@@ -78,6 +81,18 @@ string (c:cs) = char c >>= (\cutChar -> (cutChar :) <$> string cs)
 
 oneOf :: String -> Parser Char
 oneOf cs = satisfy (`elem` cs)
+
+-- D ::= foo | bar | baz
+parserD :: Parser String
+parserD = string "foo" <|> string "bar" <|> string "baz"
+
+-- E ::= ε | b
+parserE :: Parser String
+parserE = (return []) <|> ((: []) <$> char 'b')
+
+-- F ::= a E c
+parserF :: Parser String
+parserF = (\a b c -> a:b ++ [c]) <$> char 'a' <*> parserE <*> char 'c'
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
