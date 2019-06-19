@@ -15,10 +15,14 @@ module Lib
   , parserD
   , parserE
   , parserF
+  , d1
+  , d0
+  , natural
   ) where
 
 import Control.Applicative (Alternative, empty, (<|>), many, some)
 import Control.Monad (MonadPlus, mzero)
+import Data.Char (ord, isDigit)
 
 newtype Parser a = Parser (String -> [(a, String)])
 
@@ -93,6 +97,17 @@ parserE = (return []) <|> ((: []) <$> char 'b')
 -- F ::= a E c
 parserF :: Parser String
 parserF = (\a b c -> a:b ++ [c]) <$> char 'a' <*> parserE <*> char 'c'
+
+d1 :: Parser Int
+d1 = (\c -> ord c - ord '0') <$> oneOf "123456789"
+
+d0 :: Parser Int
+d0 = (\c -> ord c - ord '0') <$> satisfy isDigit
+
+natural :: Parser Int
+natural =
+  ((\_ -> 0) <$> char '0') <|> ((\n ns -> foldl toNum 0 (n:ns)) <$> d1 <*> many d0)
+    where toNum x y = x * 10 + y
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
