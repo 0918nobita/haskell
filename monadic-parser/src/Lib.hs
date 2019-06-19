@@ -8,8 +8,8 @@ module Lib
   , parserC
   ) where
 
-import Control.Applicative
-import Control.Monad
+import Control.Applicative (Alternative, empty, (<|>))
+import Control.Monad (MonadPlus)
 
 newtype Parser a = Parser (String -> [(a, String)])
 
