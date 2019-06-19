@@ -10,9 +10,11 @@ module Lib
   , char
   , string
   , oneOf
+  , many
+  , some
   ) where
 
-import Control.Applicative (Alternative, empty, (<|>))
+import Control.Applicative (Alternative, empty, (<|>), many, some)
 import Control.Monad (MonadPlus, mzero)
 
 newtype Parser a = Parser (String -> [(a, String)])
