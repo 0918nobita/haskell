@@ -8,6 +8,7 @@ module Lib
   , parserC
   , satisfy
   , char
+  , string
   ) where
 
 import Control.Applicative (Alternative, empty, (<|>))
@@ -67,6 +68,10 @@ satisfy f = item >>= (\ast -> if f ast then return ast else mzero)
 
 char :: Char -> Parser Char
 char c = satisfy (c ==)
+
+string :: String -> Parser String
+string ""     = return ""
+string (c:cs) = char c >>= (\cutChar -> (cutChar :) <$> string cs)
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
